@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+models/*.pt
+models/*.onnx
+results/*.png
+.kaggle/
+decisions.tsv
+todo.md
+*.log
+.DS_Store

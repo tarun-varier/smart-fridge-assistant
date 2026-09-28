@@ -1,0 +1,20 @@
+[
+  {
+    "image": "receipt_1.png",
+    "purchase_date": "2026-09-03",
+    "ground_truth_items": [
+      "spinach",
+      "milk",
+      "banana"
+    ]
+  },
+  {
+    "image": "receipt_2.png",
+    "purchase_date": "2026-09-15",
+    "ground_truth_items": [
+      "bread",
+      "cheese",
+      "tomato"
+    ]
+  }
+]

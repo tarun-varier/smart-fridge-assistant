@@ -1,0 +1,233 @@
+{
+  "sample_size": 20,
+  "date_accuracy": 0.8,
+  "date_hits": 16,
+  "date_total": 20,
+  "per_receipt": [
+    {
+      "receipt_id": "X51006414532",
+      "gt_date": "6/4/2018",
+      "gt_date_parsed": "2018-04-06",
+      "predicted_date": "2018-04-06",
+      "date_ok": true,
+      "extracted_lines": []
+    },
+    {
+      "receipt_id": "X51005712038",
+      "gt_date": "28/03/2018",
+      "gt_date_parsed": "2018-03-28",
+      "predicted_date": "2018-03-28",
+      "date_ok": true,
+      "extracted_lines": [
+        "PD 3.20 ~3.80",
+        "Qtv 6 Spec. Disc 0.00",
+        "Saving 3.80 Rounding 0.00"
+      ]
+    },
+    {
+      "receipt_id": "X51006619772",
+      "gt_date": "24/07/2016",
+      "gt_date_parsed": "2016-07-24",
+      "predicted_date": "2016-07-24",
+      "date_ok": true,
+      "extracted_lines": [
+        "2 VM McChicken 15.90",
+        "1 McChicken 4,00",
+        "1 ChocTop 1,90"
+      ]
+    },
+    {
+      "receipt_id": "X51005447841",
+      "gt_date": "09/03/2018",
+      "gt_date_parsed": "2018-03-09",
+      "predicted_date": "2018-03-09",
+      "date_ok": true,
+      "extracted_lines": [
+        "ZRL = 0 % 10 40 0.00"
+      ]
+    },
+    {
+      "receipt_id": "X51005568913",
+      "gt_date": "27/07/17",
+      "gt_date_parsed": "2017-07-27",
+      "predicted_date": "2017-07-27",
+      "date_ok": true,
+      "extracted_lines": [
+        "Round ling Adj 0,00"
+      ]
+    },
+    {
+      "receipt_id": "X51008142005",
+      "gt_date": "28-04-2018",
+      "gt_date_parsed": "2018-04-28",
+      "predicted_date": "2018-04-28",
+      "date_ok": true,
+      "extracted_lines": [
+        "GST Fayable: 3,72",
+        "Tota| (IncJusive of GST) : 65,72",
+        "Found ing Adj ~0,02",
+        "SR (1 6% ) 62 , 00 3,72"
+      ]
+    },
+    {
+      "receipt_id": "X51005663307",
+      "gt_date": "09/02/2018",
+      "gt_date_parsed": "2018-02-09",
+      "predicted_date": "2018-02-09",
+      "date_ok": true,
+      "extracted_lines": [
+        "Rounding Adjustment 0.01",
+        "R @ 6 % 53.58 3.21"
+      ]
+    },
+    {
+      "receipt_id": "X51006557169",
+      "gt_date": "01/09/2017",
+      "gt_date_parsed": "2017-09-01",
+      "predicted_date": "2017-09-01",
+      "date_ok": true,
+      "extracted_lines": [
+        "0.\u20ac WHITE 2.13 4.26",
+        "MHOL EMEAL 2.78 2 ~3 8.34",
+        "CR-CHOCLT 0.72 10 5.76",
+        "GST: 0.35"
+      ]
+    },
+    {
+      "receipt_id": "X51005447848",
+      "gt_date": "06/01/18",
+      "gt_date_parsed": "2018-01-06",
+      "predicted_date": "2018-01-06",
+      "date_ok": true,
+      "extracted_lines": [
+        "(S) 15.90",
+        "GST (6%) 2.86",
+        "Net Amt : 53.55"
+      ]
+    },
+    {
+      "receipt_id": "X51007846357",
+      "gt_date": "01/06/2018",
+      "gt_date_parsed": "2018-06-01",
+      "predicted_date": "2018-06-01",
+      "date_ok": true,
+      "extracted_lines": []
+    },
+    {
+      "receipt_id": "X51005763958",
+      "gt_date": "27-01-2018",
+      "gt_date_parsed": "2018-01-27",
+      "predicted_date": "2026-09-03",
+      "date_ok": false,
+      "extracted_lines": [
+        "SR (68) 55.66 3.34",
+        "ZR (OX) 0,00 0.00"
+      ]
+    },
+    {
+      "receipt_id": "X51005442344",
+      "gt_date": "13/03/2018",
+      "gt_date_parsed": "2018-03-13",
+      "predicted_date": "2018-03-13",
+      "date_ok": true,
+      "extracted_lines": [
+        "Itern 1.Q0 PCS 48.0Q 50.88 50.08",
+        "6736 1.00 SET\" 47.17 60.00 50.00",
+        "SR 95.17 6.71"
+      ]
+    },
+    {
+      "receipt_id": "X51005663276",
+      "gt_date": "02/12/2017",
+      "gt_date_parsed": "2017-12-02",
+      "predicted_date": "2017-12-02",
+      "date_ok": true,
+      "extracted_lines": [
+        "Tolal Sales ( Excluding GST) 7.00",
+        "Discount 0.00",
+        "Rounding 0.00",
+        "Tot `| 7.00 0.42"
+      ]
+    },
+    {
+      "receipt_id": "X51007103688",
+      "gt_date": "27-04-18",
+      "gt_date_parsed": "2018-04-27",
+      "predicted_date": "2018-04-27",
+      "date_ok": true,
+      "extracted_lines": [
+        "GST @6% included in tota] RH 2.15"
+      ]
+    },
+    {
+      "receipt_id": "X51006856981",
+      "gt_date": "07/07/17",
+      "gt_date_parsed": "2017-07-07",
+      "predicted_date": "2017-07-07",
+      "date_ok": true,
+      "extracted_lines": [
+        "CABH 20.00",
+        "Rqunding  ADJUSTMENTS 0.02",
+        "8 6k 13.00 0.78"
+      ]
+    },
+    {
+      "receipt_id": "X51005568881",
+      "gt_date": "21/09/2017",
+      "gt_date_parsed": "2017-09-21",
+      "predicted_date": "2000-05-27",
+      "date_ok": false,
+      "extracted_lines": [
+        "Jiscount: 0,00",
+        "Rounding Adj 0.00",
+        "Tolal Inclusive GST: 10,40",
+        "Tolal 9.81 0,59 10.40"
+      ]
+    },
+    {
+      "receipt_id": "X51006248253",
+      "gt_date": "29/03/2018",
+      "gt_date_parsed": "2018-03-29",
+      "predicted_date": "2018-03-29",
+      "date_ok": true,
+      "extracted_lines": [
+        "1 UNIT 15.00 0.00 15.00",
+        "GST 6% 0.85",
+        "SR 6% 14.15 0.85"
+      ]
+    },
+    {
+      "receipt_id": "X51005663280",
+      "gt_date": "30 DEC 17",
+      "gt_date_parsed": "2017-12-30",
+      "predicted_date": null,
+      "date_ok": false,
+      "extracted_lines": [
+        "10% Srv Chg 8.78",
+        "GST @6X 5.81",
+        "S-GST @67:96,58",
+        "Z-GST @O%;o.00 0.00"
+      ]
+    },
+    {
+      "receipt_id": "X51008142063",
+      "gt_date": "30/04/2018",
+      "gt_date_parsed": "2018-04-30",
+      "predicted_date": "2026-09-24",
+      "date_ok": false,
+      "extracted_lines": [
+        "Tctal Sales (Excluding GST) 381.50",
+        "Discount 0.00",
+        "Rounding 0,00"
+      ]
+    },
+    {
+      "receipt_id": "X51006912998",
+      "gt_date": "08-05-2018",
+      "gt_date_parsed": "2018-05-08",
+      "predicted_date": "2018-05-08",
+      "date_ok": true,
+      "extracted_lines": []
+    }
+  ]
+}
