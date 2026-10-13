@@ -1,0 +1,67 @@
+# Smart Fridge / Food Waste Reduction Assistant
+
+A multimodal CV + NLP system that tracks food items in a household fridge, estimates their freshness from two independent signals, and alerts the user before food spoils. Scope is locked to three Categories: `apple`, `banana`, `orange`.
+
+## Problem & Motivation
+
+Households throw away fresh food because nobody tracks when it was bought or how it's holding up. This project tackles that with two independent, mutually-confirming freshness signals instead of one shaky one:
+
+- A **Date-Based Freshness Signal**, computed the moment a grocery receipt is scanned, from a fixed Shelf-Life Table (`docs/shelf-life-table.md`) and the extracted purchase date — immediate but blind to actual condition.
+- A **Visual Freshness Signal**, computed on demand from a photo of the actual item — direct evidence, but something the user has to volunteer.
+
+Terminology and the rules linking these concepts (Food Item, Category, Freshness) are fixed in `CONTEXT.md`; this report doesn't restate that vocabulary.
+
+## Architecture
+
+Two independent pipelines feed one shared Food Item state, surfaced through a single Streamlit page.
+
+```
+Receipt photo --> Receipt Pipeline --> Date-Based Signal --+
+                                                            |--> Food Item --> Freshness --> Alerts / Inventory
+Camera photo  --> Vision Pipeline  --> Visual Signal   -----+        ^
+                                                                     |
+                                                        (Vision only ever confirms
+                                                         an existing Food Item)
+```
+
+**Vision Pipeline** (`vision/`, ADR [0001](adr/0001-vision-pipeline-backbone.md)): a frozen, ImageNet-pretrained ResNet18 extracts 512-d features from a 224×224 image in a single forward-only pass (`vision/features.py`); a small MLP head (`vision/model.py`) trained on those cached features predicts one of 6 fresh/rotten classes. Invoked only from an alert's "Confirm with camera" action (`vision/infer.py`), never on its own — `FridgeState.apply_vision` is a no-op without a prior Food Item (`fridge/state.py`).
+
+**Receipt Pipeline** (`receipt/`, ADR [0002](adr/0002-receipt-pipeline-architecture.md)): two independent zero-shot passes over the same receipt image. `donut-base-finetuned-cord-v2` (`receipt/donut_extraction.py`) extracts line items as structured text; Tesseract OCR + regex/`dateutil` (`receipt/date_extraction.py`) extracts one receipt-level purchase date, broadcast to every line item (`receipt/pipeline.py`). Each extracted line is fuzzy-matched (`rapidfuzz`) against the Category vocabulary and its synonyms (`receipt/categories.py`); no confident match is flagged `unrecognized category` rather than dropped or bucketed.
+
+**Fridge state** (`fridge/`): at most one Food Item per Category, replaced (not merged) on a new Receipt Pipeline reading (`fridge/state.py`). `fridge/shelf_life.py` holds the hardcoded per-Category fridge-days table. `fridge/freshness.py::resolve_freshness` implements the conflict rule: a Visual Freshness Signal, once present, always wins over the Date-Based Signal.
+
+**Streamlit demo** (`app.py`): receipt upload with an editable/backdateable purchase date → primary Alert list (each with a "Confirm with camera" action) → secondary Inventory table of non-alerting Categories → collapsible Unrecognized-items section.
+
+## Dataset & Training
+
+**Vision Pipeline.** Kaggle `sriramr/fruits-fresh-and-rotten-for-classification`. The provided `train/` split was further split 85/15 into train/val; the provided `test/` split was held out untouched for evaluation. Frozen ResNet18 features were cached once (forward-only, no augmentation — augmentation is incompatible with feature caching) and the MLP head (512→256→6, ReLU, dropout 0.3) was trained with AdamW (LR 1e-3, weight decay 1e-4, batch size 64, unweighted cross-entropy), up to 40 epochs with early stopping on validation accuracy (patience 5) and best-epoch checkpointing. Checkpoint: `models/vision_head_best.pt`.
+
+**Receipt Pipeline.** No fine-tuning for v1 (ADR 0002) — both extraction passes run zero-shot against their respective pretrained checkpoints. Real-receipt evaluation data is hand-photographed and hand-labeled rather than trained on; see Evaluation Results and Limitations below.
+
+**Shelf-Life Table.** Sourced from the USDA FSIS FoodKeeper dataset, cross-checked against StillTasty where FoodKeeper lacked a clean number (`docs/receipt-finetuning-dataset-research.md`). Each sourced day-range was collapsed to one implementation value (`fridge/shelf_life.py`): apple 35d (midpoint of 28–42), banana 3d (FoodKeeper's single once-ripe figure), orange 15d (midpoint of 10–21, FoodKeeper's combined citrus-fruit entry).
+
+## Evaluation Results
+
+Full numbers, per-class tables, and confusion-matrix figures: [`docs/evaluation-results.md`](evaluation-results.md). Generated by `scripts/evaluate.py` — see the README for how to rerun it.
+
+Headline numbers, held-out `test/` split (2698 images): **99.59% accuracy, 0.9959 macro F1** across all 6 fresh/rotten classes, **99.74% accuracy** on the derived binary fresh/rotten roll-up.
+
+The Receipt Pipeline's evaluation section is pending real-receipt collection (see Limitations) — the scoring logic itself is implemented and unit-verified, and will populate `docs/evaluation-results.md` the moment `data/real_receipts/labels.csv` exists.
+
+## Demo Walkthrough
+
+1. Upload a photo or scan of a grocery receipt. The Receipt Pipeline extracts line items and a purchase date; the date field is editable (e.g. to backdate a receipt for testing, or correct a misread date).
+2. Click "Add to fridge." Each recognized line item becomes a Food Item with a Date-Based Freshness Signal; unmatched lines go to the collapsible Unrecognized-items section instead.
+3. Food Items past their Shelf-Life Table window surface in the **Alerts** section with a date-based freshness estimate.
+4. From an alert, "Confirm with camera" takes or uploads a photo of the actual item. The Vision Pipeline classifies it; if the photo matches the alert's Category, the Visual Freshness Signal is applied and — win or lose against the date-based read — takes over as that Food Item's freshness.
+5. Food Items not currently alerting (or confirmed fresh by camera) show up in the **Inventory** table below, each row noting whether its current signal is date-based or visual.
+
+## Limitations & Stretch Goals
+
+- **Receipt Pipeline evaluation is blocked** on collecting and hand-labeling ~15–20 real receipts (Phase 1 of `docs/implementation-task-breakdown.md`) — a lead-time risk flagged on day 1 that didn't clear in time. The scoring script runs the moment that set lands.
+- **Three Categories only** (`apple`, `banana`, `orange`) — a deliberate v1 scope lock, not a technical ceiling.
+- **No receipt image preprocessing** (deskew, binarization, contrast correction) — both extraction passes rely on their models' own defaults (ADR 0002). Deferred, not ruled out, pending evidence that raw phone-camera photos need it.
+- **No Donut fine-tuning** — the receipt line-item extractor runs zero-shot against the stock CORD-v2 checkpoint; a licensed, Donut-trainable receipt dataset was identified as a prerequisite and deferred to its own research ticket.
+- **Single-page, single-receipt scope** — multi-page receipts and batched multi-receipt uploads are explicitly out of scope (ADR 0002), not deferred.
+- **Vision Pipeline is reactive-only by design** — it never runs unprompted, so a Food Item with a wrong Date-Based Signal and no camera confirmation never self-corrects. This is the intended division of labor between the two signals, not a bug.
+- **Stretch goals considered and deferred**, each already tracked by its own ADR/ticket rather than attempted here: partial ResNet18 fine-tuning ("Plan B" in Phase 2), YOLOv8 multi-item detection, recipe suggestions, a mobile app.

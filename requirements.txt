@@ -1,0 +1,19 @@
+# Python 3.14.7, CPU-only (no GPU on this machine).
+# torch/torchvision must come from the PyTorch CPU wheel index:
+#   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.14.1+cpu
+torchvision==0.29.1+cpu
+
+streamlit==1.65.0
+
+pytesseract==0.3.13      # wraps system Tesseract (5.5.3 installed at /usr/bin/tesseract)
+transformers==5.19.0     # donut-base-finetuned-cord-v2
+sentencepiece==0.2.2
+protobuf==7.36.2
+
+rapidfuzz==3.14.6        # Category fuzzy matching
+python-dateutil==2.9.0.post0
+pandas==3.0.6
+pillow==12.3.0
+matplotlib==3.11.2      # evaluation figures (scripts/evaluate.py)

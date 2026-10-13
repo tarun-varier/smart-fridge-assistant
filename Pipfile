@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+torch = "==2.14.1+cpu"
+torchvision = "==0.29.1+cpu"
+streamlit = "==1.65.0"
+pytesseract = "==0.3.13"
+transformers = "==5.19.0"
+sentencepiece = "==0.2.2"
+protobuf = "==7.36.2"
+rapidfuzz = "==3.14.6"
+python-dateutil = "==2.9.0.post0"
+pandas = "==3.0.6"
+pillow = "==12.3.0"
+matplotlib = "==3.11.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.14"
